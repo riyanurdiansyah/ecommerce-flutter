@@ -49,9 +49,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _changeObsecurePassword(
       ChangeObsecurePassword event, Emitter<AuthState> emit) async {
     if (event.isObsecure) {
-      emit(IsObsecurePasswordState());
+      IsObsecurePasswordState();
     } else {
-      emit(IsNotObsecurePasswordState());
+      IsNotObsecurePasswordState();
     }
   }
 

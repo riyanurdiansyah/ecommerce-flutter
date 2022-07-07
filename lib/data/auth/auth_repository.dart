@@ -24,7 +24,6 @@ class AuthRepository extends AuthDataSource {
       data: body,
       options: optionsDefault,
     );
-    print(response.data);
     return AuthUserEntity.fromJson(response.data);
   }
 }

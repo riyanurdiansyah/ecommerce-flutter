@@ -29,3 +29,20 @@ class ChangePassword extends LoginEvent {
     required this.password,
   });
 }
+
+class LoginByEmail extends LoginEvent {
+  final String email;
+  final String password;
+
+  const LoginByEmail({
+    required this.email,
+    required this.password,
+  });
+}
+
+class ChangeObsecurePassword extends LoginEvent {
+  final bool isObsecure;
+  const ChangeObsecurePassword({
+    required this.isObsecure,
+  });
+}

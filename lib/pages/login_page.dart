@@ -107,18 +107,19 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 15,
             ),
-            BlocBuilder<LoginBloc, LoginState>(
-              builder: (context, state) => TextFormField(
+            BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+              return TextFormField(
                 style: AppStyleTextfield.authTextFieldStyle(12),
-                // obscureText: state is IsObsecurePasswordState ? false : true,
+                obscureText: state.isObsecure,
                 decoration:
                     AppStyleTextfield.authFormInput('Password', '********', 12)
                         .copyWith(
                   suffixIcon: IconButton(
-                    onPressed: () {
-                      // print("EMAIL : ${state.email}");
-                      // print("PASS : ${state.password}");
-                    },
+                    onPressed: () => context.read<LoginBloc>().add(
+                          ChangeObsecurePassword(
+                            isObsecure: !state.isObsecure,
+                          ),
+                        ),
                     icon: Icon(
                       Icons.visibility,
                       color: Colors.grey.shade400,
@@ -131,8 +132,8 @@ class _LoginPageState extends State<LoginPage> {
                         password: value,
                       ),
                     ),
-              ),
-            ),
+              );
+            }),
             BlocBuilder<LoginBloc, LoginState>(
               builder: ((context, state) {
                 if (state is ErrorInputState) {
@@ -167,20 +168,18 @@ class _LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.circular(7),
                     ),
                   ),
-                  onPressed: () {},
-                  // onPressed: state is PasswordValidState
-                  //     ? state is EmailValidState
-                  //         ? () {
-                  //             context.read<LoginBloc>().add(LoginByEmail(
-                  //                 email: state.email!,
-                  //                 password: state.password!));
+                  onPressed:
+                      state.errorEmail == '-' && state.errorPassword == '-'
+                          ? () {
+                              context.read<LoginBloc>().add(LoginByEmail(
+                                  email: state.email,
+                                  password: state.password));
 
-                  //             context
-                  //                 .read<LoginBloc>()
-                  //                 .add(const ChangeLoading(isLoading: false));
-                  //           }
-                  //         : null
-                  //     : null,
+                              // context
+                              //     .read<LoginBloc>()
+                              //     .add(const ChangeLoading(isLoading: false));
+                            }
+                          : null,
                   child: Text(
                     'MASUK',
                     style: GoogleFonts.aBeeZee(

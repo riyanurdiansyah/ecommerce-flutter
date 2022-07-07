@@ -1,3 +1,4 @@
+import 'package:ecommerce_flutter/data/entity/auth_user_entity.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class LoginState extends Equatable {
@@ -6,15 +7,18 @@ abstract class LoginState extends Equatable {
     this.password = '',
     this.errorEmail = '',
     this.errorPassword = '',
+    this.isObsecure = true,
   });
 
   final String email;
   final String password;
   final String errorEmail;
   final String errorPassword;
+  final bool isObsecure;
 
   @override
-  List<Object?> get props => [email, password, errorEmail, errorPassword];
+  List<Object?> get props =>
+      [email, password, errorEmail, errorPassword, isObsecure];
 }
 
 class InitialLoginState extends LoginState {
@@ -48,10 +52,48 @@ class ChangeInputState extends LoginState {
     String valPass,
     String emailError,
     String passError,
+    bool valObsecure,
   ) : super(
           email: valEmail,
           password: valPass,
           errorEmail: emailError,
           errorPassword: passError,
+          isObsecure: valObsecure,
         );
 }
+
+class LoginNoData extends LoginState {
+  final String? nodataMessage;
+
+  const LoginNoData({this.nodataMessage});
+  @override
+  List<Object> get props => [nodataMessage ?? ''];
+
+  @override
+  String toString() => 'LOGIN NO DATA --> message: $nodataMessage';
+}
+
+class LoginHasData extends LoginState {
+  final AuthUserEntity? dataUser;
+
+  const LoginHasData({this.dataUser});
+
+  @override
+  List<Object> get props => [dataUser ?? AuthUserEntity()];
+}
+
+class ErrorLoginState extends LoginState {
+  final String? errorMessage;
+
+  const ErrorLoginState({this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage ?? ''];
+
+  @override
+  String toString() => 'LOGIN FAILURE --> message: $errorMessage';
+}
+
+class IsObsecurePasswordState extends LoginState {}
+
+class IsNotObsecurePasswordState extends LoginState {}
