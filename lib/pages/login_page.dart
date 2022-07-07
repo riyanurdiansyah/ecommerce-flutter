@@ -1,18 +1,23 @@
 import 'dart:io';
-
-import 'package:ecommerce_flutter/bloc/auth/auth_bloc.dart';
-import 'package:ecommerce_flutter/bloc/auth/auth_event.dart';
-import 'package:ecommerce_flutter/bloc/auth/auth_state.dart';
+import 'package:ecommerce_flutter/bloc/login/login_bloc.dart';
+import 'package:ecommerce_flutter/bloc/login/login_event.dart';
+import 'package:ecommerce_flutter/bloc/login/login_state.dart';
+import 'package:ecommerce_flutter/utils/routes/app_route.dart';
 import 'package:ecommerce_flutter/utils/styles/app_color.dart';
 import 'package:ecommerce_flutter/utils/styles/app_style_textfield.dart';
-import 'package:ecommerce_flutter/utils/validation/app_validator.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -64,65 +69,78 @@ class LoginPage extends StatelessWidget {
                 )
               ],
             ),
-            // const SizedBox(
-            //   height: 35,
-            // ),
-            // Text(
-            //   'Masuk',
-            //   style: GoogleFonts.adventPro(
-            //     fontSize: 24,
-            //     color: Colors.blue,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
             const SizedBox(
               height: 50,
             ),
-
-            BlocBuilder<AuthBloc, AuthState>(
+            BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) => TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 style: AppStyleTextfield.authTextFieldStyle(12),
                 decoration: AppStyleTextfield.authFormInput(
                     'Email', 'email@example.com', 12),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) => AppValidator.requiredField(
-                  value!,
-                  errorMsg: "Email tidak boleh kosong",
-                ),
-                onChanged: (value) => context.read<AuthBloc>().add(
-                      ChangeEmail(email: value),
+                onChanged: (value) => context.read<LoginBloc>().add(
+                      ChangeEmail(
+                        email: value,
+                      ),
                     ),
               ),
+            ),
+            BlocBuilder<LoginBloc, LoginState>(
+              builder: ((context, state) {
+                if (state is ErrorInputState) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      state.errorEmail,
+                      style: GoogleFonts.aBeeZee(
+                        fontSize: 11,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              }),
             ),
             const SizedBox(
               height: 15,
             ),
-            TextFormField(
-              style: AppStyleTextfield.authTextFieldStyle(12),
-              decoration:
-                  AppStyleTextfield.authFormInput('Password', '********', 12)
-                      .copyWith(
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    Icons.visibility,
-                    color: Colors.grey.shade400,
-                    size: size.shortestSide < 600 ? 22 : 42,
+            BlocBuilder<LoginBloc, LoginState>(
+              builder: (context, state) => TextFormField(
+                style: AppStyleTextfield.authTextFieldStyle(12),
+                // obscureText: state is IsObsecurePasswordState ? false : true,
+                decoration:
+                    AppStyleTextfield.authFormInput('Password', '********', 12)
+                        .copyWith(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      // print("EMAIL : ${state.email}");
+                      // print("PASS : ${state.password}");
+                    },
+                    icon: Icon(
+                      Icons.visibility,
+                      color: Colors.grey.shade400,
+                      size: size.shortestSide < 600 ? 22 : 42,
+                    ),
                   ),
-                  onPressed: () {},
                 ),
+                onChanged: (value) => context.read<LoginBloc>().add(
+                      ChangePassword(
+                        password: value,
+                      ),
+                    ),
               ),
-              onChanged: (value) => context.read<AuthBloc>().add(
-                    ChangePassword(password: value),
-                  ),
             ),
-            BlocBuilder<AuthBloc, AuthState>(
+            BlocBuilder<LoginBloc, LoginState>(
               builder: ((context, state) {
-                if (state is ErrorPasswordState) {
+                if (state is ErrorInputState) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                      state.errorPassword!,
+                      // state.password ?? 'kosong jg',
+                      state.errorPassword,
                       style: GoogleFonts.aBeeZee(
                         fontSize: 11,
                         fontWeight: FontWeight.normal,
@@ -138,7 +156,7 @@ class LoginPage extends StatelessWidget {
             const SizedBox(
               height: 25,
             ),
-            BlocBuilder<AuthBloc, AuthState>(
+            BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) => SizedBox(
                 width: size.width,
                 height: size.shortestSide < 600 ? 45 : 75,
@@ -149,23 +167,27 @@ class LoginPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(7),
                     ),
                   ),
-                  child: state.isLoading
-                      ? const CircularProgressIndicator()
-                      : Text(
-                          'MASUK',
-                          style: GoogleFonts.aBeeZee(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                  onPressed: () {
-                    context.read<AuthBloc>().add(const LoginByEmail(
-                        email: 'riyan@gmail.com', password: 'riyan@123'));
+                  onPressed: () {},
+                  // onPressed: state is PasswordValidState
+                  //     ? state is EmailValidState
+                  //         ? () {
+                  //             context.read<LoginBloc>().add(LoginByEmail(
+                  //                 email: state.email!,
+                  //                 password: state.password!));
 
-                    context
-                        .read<AuthBloc>()
-                        .add(const ChangeLoading(isLoading: false));
-                  },
+                  //             context
+                  //                 .read<LoginBloc>()
+                  //                 .add(const ChangeLoading(isLoading: false));
+                  //           }
+                  //         : null
+                  //     : null,
+                  child: Text(
+                    'MASUK',
+                    style: GoogleFonts.aBeeZee(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -209,6 +231,9 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRouteName.register);
+                  },
                   child: Image.asset(
                     'assets/images/google.png',
                     width: 30,
@@ -219,13 +244,15 @@ class LoginPage extends StatelessWidget {
                   width: 30,
                   color: Colors.black,
                 ),
-                Platform.isIOS
-                    ? Image.asset(
-                        'assets/images/apple.png',
-                        width: 30,
-                        color: Colors.black,
-                      )
-                    : const SizedBox(),
+                kIsWeb
+                    ? const SizedBox()
+                    : Platform.isIOS
+                        ? Image.asset(
+                            'assets/images/apple.png',
+                            width: 30,
+                            color: Colors.black,
+                          )
+                        : const SizedBox(),
               ],
             )
           ],

@@ -15,12 +15,14 @@ class AuthState extends Equatable {
   final bool isLoading;
   final String? email;
   final String? password;
+  final bool isObsecure;
 
   const AuthState({
     this.idSelected = 0,
     this.isLoading = false,
     this.email,
     this.password,
+    this.isObsecure = true,
   });
 
   @override
@@ -31,12 +33,14 @@ class AuthState extends Equatable {
     bool? isLoading,
     String? email,
     String? password,
+    bool? isObsecure,
   }) {
     return AuthState(
       idSelected: idSelected ?? this.idSelected,
       isLoading: isLoading ?? this.isLoading,
       email: email ?? this.email,
       password: password ?? this.password,
+      isObsecure: isObsecure ?? this.isObsecure,
     );
   }
 }
@@ -46,6 +50,10 @@ class InitialAuthState extends AuthState {}
 class EmailValidState extends AuthState {}
 
 class PasswordValidState extends AuthState {}
+
+class IsObsecurePasswordState extends AuthState {}
+
+class IsNotObsecurePasswordState extends AuthState {}
 
 class LoadingAuthState extends AuthState {
   final bool isLoadingAuth;
@@ -69,6 +77,13 @@ class ErrorPasswordState extends AuthState {
 
   @override
   List<Object> get props => [errorPassword ?? ''];
+}
+
+class ObsecurePasswordState extends AuthState {
+  @override
+  final bool isObsecure;
+
+  const ObsecurePasswordState({required this.isObsecure});
 }
 
 class ErrorAuthState extends AuthState {

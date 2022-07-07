@@ -2,10 +2,13 @@ import 'package:ecommerce_flutter/bloc/auth/auth_event.dart';
 import 'package:ecommerce_flutter/bloc/auth/auth_state.dart';
 import 'package:ecommerce_flutter/data/auth/auth_repository.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final authRepository = AuthRepository();
+
+  final emailTC = TextEditingController();
 
   AuthBloc() : super(InitialAuthState()) {
     on<SelectLoginBy>(_changeSelectedLogin);
@@ -14,6 +17,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ChangeLoading>(_changeLoading);
     on<ChangeEmail>(_changeEmail);
     on<ChangePassword>(_changePassword);
+    on<ChangeObsecurePassword>(_changeObsecurePassword);
+  }
+
+  @override
+  Future<void> close() {
+    print("ON CLOSE");
+    return super.close();
+  }
+
+  void dispose() {
+    print("DISPOSE");
+    emailTC.dispose();
   }
 
   void _changeSelectedLogin(
@@ -29,6 +44,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(
       state.copyWith(isLoading: event.isLoading),
     );
+  }
+
+  void _changeObsecurePassword(
+      ChangeObsecurePassword event, Emitter<AuthState> emit) async {
+    if (event.isObsecure) {
+      emit(IsObsecurePasswordState());
+    } else {
+      emit(IsNotObsecurePasswordState());
+    }
   }
 
   void _changeEmail(ChangeEmail event, Emitter<AuthState> emit) async {

@@ -52,6 +52,13 @@ class ChangeLoading extends AuthEvent {
   });
 }
 
+class ChangeObsecurePassword extends AuthEvent {
+  final bool isObsecure;
+  const ChangeObsecurePassword({
+    required this.isObsecure,
+  });
+}
+
 class ChangeEmail extends AuthEvent {
   final String email;
   const ChangeEmail({
