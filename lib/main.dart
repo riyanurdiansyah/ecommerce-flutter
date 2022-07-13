@@ -1,8 +1,6 @@
-import 'package:ecommerce_flutter/bloc/login/login_bloc.dart';
+import 'package:ecom_setup/ecom_setup.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ecommerce_flutter/utils/routes/app_generate_route.dart'
-    as router;
+import 'package:get/get.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,17 +12,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<LoginBloc>(
-          create: (context) => LoginBloc(),
-        ),
-      ],
-      child: const MaterialApp(
-        initialRoute: '/',
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: router.generateRoute,
-      ),
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: child!),
+      initialRoute: AppRouteName.splash,
+      getPages: AppRoute.routes,
     );
   }
 }

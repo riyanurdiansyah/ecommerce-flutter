@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:ecommerce_flutter/data/auth/auth_data_source.dart';
 import 'package:ecommerce_flutter/data/entity/auth_user_entity.dart';
-import 'package:ecommerce_flutter/utils/constans/app_contanta.dart';
+import 'package:ecom_setup/ecom_setup.dart';
 
 class AuthRepository extends AuthDataSource {
   late Dio _dio;
@@ -22,7 +22,6 @@ class AuthRepository extends AuthDataSource {
     final response = await _dio.post(
       '$baseUrl/auth/signin',
       data: body,
-      options: optionsDefault,
     );
     return AuthUserEntity.fromJson(response.data);
   }
