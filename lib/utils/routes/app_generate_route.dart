@@ -1,5 +1,6 @@
-import 'package:ecommerce_flutter/pages/login_page.dart';
-import 'package:ecommerce_flutter/pages/register_page.dart';
+import 'package:ecommerce_flutter/pages/mobile/login_by_phone_page.dart';
+import 'package:ecommerce_flutter/pages/mobile/login_page.dart';
+import 'package:ecommerce_flutter/pages/mobile/register_page.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -12,12 +13,22 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/register':
       return MaterialPageRoute(
           settings: routeSettings(settings),
-          builder: (context) => const RegiisterPage());
+          builder: (context) => const RegisterPage());
+
+    case '/signin':
+      return MaterialPageRoute(
+          settings: routeSettings(settings),
+          builder: (context) => const LoginPage());
+
+    case '/signin/phone':
+      return MaterialPageRoute(
+          settings: routeSettings(settings),
+          builder: (context) => const LoginByPhonePage());
 
     default:
       return MaterialPageRoute(
           settings: routeSettings(settings),
-          builder: (context) => const RegiisterPage());
+          builder: (context) => const RegisterPage());
   }
 }
 

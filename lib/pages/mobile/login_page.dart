@@ -238,10 +238,15 @@ class _LoginPageState extends State<LoginPage> {
                     width: 30,
                   ),
                 ),
-                Image.asset(
-                  'assets/images/hp.png',
-                  width: 30,
-                  color: Colors.black,
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRouteName.signinByPhone);
+                  },
+                  child: Image.asset(
+                    'assets/images/hp.png',
+                    width: 30,
+                    color: Colors.black,
+                  ),
                 ),
                 kIsWeb
                     ? const SizedBox()
