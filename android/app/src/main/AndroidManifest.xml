@@ -1,7 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ecommerce_flutter">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools="http://schemas.android.com/tools"
+    package="com.ecom.hamburin">
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="ecommerce_flutter"
+        android:usesCleartextTraffic="true"
+        android:label="Hambur.In"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

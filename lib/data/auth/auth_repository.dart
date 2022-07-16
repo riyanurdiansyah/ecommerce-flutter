@@ -22,6 +22,9 @@ class AuthRepository extends AuthDataSource {
     final response = await _dio.post(
       '$baseUrl/auth/signin',
       data: body,
+      options: Options(
+        validateStatus: (status) => status! < 500,
+      ),
     );
     return AuthUserEntity.fromJson(response.data);
   }

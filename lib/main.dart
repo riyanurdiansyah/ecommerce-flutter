@@ -14,9 +14,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      enableLog: true,
       builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-          child: child!),
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        child: child!,
+      ),
       initialRoute: AppRouteName.splash,
       getPages: AppRoute.routes,
     );
